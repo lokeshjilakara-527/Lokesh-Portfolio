@@ -1,0 +1,124 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ===========================================================
+   Base theme
+   =========================================================== */
+:root {
+  color-scheme: dark;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-ink-950 text-slate-200 font-sans antialiased;
+  overflow-x: hidden;
+}
+
+/* Light theme overrides (toggled by removing `.dark` on <html>) */
+html:not(.dark) body {
+  @apply bg-slate-100 text-slate-800;
+}
+
+/* Hide the native cursor only on devices that have a fine pointer,
+   so the custom cursor takes over without hurting touch users. */
+@media (hover: hover) and (pointer: fine) {
+  .custom-cursor-active * {
+    cursor: none !important;
+  }
+}
+
+/* ===========================================================
+   Reusable component classes
+   =========================================================== */
+@layer components {
+  /* Frosted glass panel */
+  .glass {
+    @apply border border-white/10 bg-white/5 backdrop-blur-xl;
+  }
+  html:not(.dark) .glass {
+    @apply border-slate-900/10 bg-white/60;
+  }
+
+  /* Gradient text */
+  .text-gradient {
+    @apply bg-accent-gradient bg-clip-text text-transparent;
+  }
+
+  /* Gradient border card (uses a masked pseudo element) */
+  .gradient-border {
+    position: relative;
+  }
+  .gradient-border::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(124, 92, 255, 0.7), rgba(34, 211, 238, 0.7));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    pointer-events: none;
+  }
+  .gradient-border:hover::before {
+    opacity: 1;
+  }
+
+  /* Primary CTA */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-accent-gradient px-6 py-3
+           font-medium text-white shadow-glow transition-transform duration-300
+           hover:-translate-y-0.5 hover:shadow-glow-cyan focus-visible:outline focus-visible:outline-2
+           focus-visible:outline-offset-2 focus-visible:outline-cyber-cyan;
+  }
+
+  /* Secondary / ghost CTA */
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-white/5
+           px-6 py-3 font-medium text-slate-100 backdrop-blur-md transition-colors duration-300
+           hover:border-cyber-violet/60 hover:text-white focus-visible:outline focus-visible:outline-2
+           focus-visible:outline-offset-2 focus-visible:outline-cyber-violet;
+  }
+  html:not(.dark) .btn-ghost {
+    @apply border-slate-300 text-slate-700 hover:text-slate-900;
+  }
+}
+
+/* ===========================================================
+   Custom scrollbar
+   =========================================================== */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(#7c5cff, #22d3ee);
+  border-radius: 999px;
+}
+
+::selection {
+  background: rgba(124, 92, 255, 0.4);
+  color: #fff;
+}
+
+/* Respect reduced motion globally */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
